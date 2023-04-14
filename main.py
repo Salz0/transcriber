@@ -1,16 +1,11 @@
 import whisper
-import os
 import pathlib
-import numpy as np
 from math import inf
 import os
-from pydub import AudioSegment
-import math
-import datetime, time
+import datetime
 import uvicorn
-from fastapi import FastAPI, Request, Response, File, Form, UploadFile
+from fastapi import FastAPI, Request, Response, File, UploadFile
 from fastapi.responses import FileResponse
-
 from loguru import logger
 
 '''
