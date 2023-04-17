@@ -8,7 +8,7 @@ from fastapi import FastAPI, Request, Response, File, UploadFile
 from fastapi.responses import FileResponse
 from loguru import logger
 
-'''
+"""
 class SplitWavAudioMubin():
     def __init__(self, folder, filename):
         self.folder = folder
@@ -37,20 +37,22 @@ class SplitWavAudioMubin():
             if i == total_mins - min_per_split:
                 print('All splited successfully')
                 return counter + 1
-'''
+"""
 
 # split_flac = SplitWavAudioMubin('splits', 'speech.wav')
 # splits_amount = split_flac.multiple_split(min_per_split=1)
-print('Successfully splitted')
+print("Successfully splitted")
 
 
 def splitter(audio_file_path: str):
     # print(whisper.available_models())
     initial_time = datetime.datetime.now()
     model = whisper.load_model("base", in_memory=False)
-    options = whisper.DecodingOptions(language='uk', without_timestamps=True, fp16=False)
+    options = whisper.DecodingOptions(
+        language="uk", without_timestamps=True, fp16=False
+    )
     print(f"Decoding options: {options}")
-    transcribed_text = open('Interview.txt', 'a')
+    transcribed_text = open("Interview.txt", "a")
     for i in range(0, 1):  # splits_amount
         # audio,sr=librosa.load(f'splits/{i}_speech.flac', sr=None, mono=True)
         # audio=whisper.load_audio(f'splits/{i}_speech.flac')
@@ -59,19 +61,21 @@ def splitter(audio_file_path: str):
 
         # _,probs=model.detect_language(mel)
         # print(f"Detected language: {max(probs,key=probs.get)}")
-        result = whisper.transcribe(model, audio, language="Ukrainian", without_timestamps=True, verbose="DEBUG")
-        print(result['text'])
+        result = whisper.transcribe(
+            model, audio, language="Ukrainian", without_timestamps=True, verbose="DEBUG"
+        )
+        print(result["text"])
         # result=whisper.decode(model,mel,options)
 
         # result = model.transcribe("speech.flac")
-        transcribed_text.write('\n' + result['text'])
+        transcribed_text.write("\n" + result["text"])
     transcribed_text.close()
     os.remove(audio_file_path)
     final_time = datetime.datetime.now()
     time_elapsed = final_time - initial_time
     print(time_elapsed, "Seconds")
-    filename = 'Interview.txt'
-    file_path = ''
+    filename = "Interview.txt"
+    file_path = ""
     return file_path, filename
 
 
@@ -91,16 +95,17 @@ async def transcribe(file: UploadFile = File(...)):
 
     logger.info(file_name)
     # logger.info(audio_file)
-    file_path, filename = splitter(f'{file_name}')
+    file_path, filename = splitter(f"{file_name}")
 
     # do something with the file, such as processing it or storing it in a database
-    return FileResponse(f'{filename}')
+    return FileResponse(f"{filename}")
 
 
-@app.get('/')
+@app.get("/")
 async def basic(request: Request, response: Response):
     return {"message": "YA RABOTAYU BLYAT'"}
 
 
 if __name__ == "__main__":
+    whisper.load_model("base", in_memory=False)
     uvicorn.run(app, host="0.0.0.0", port=8000)
