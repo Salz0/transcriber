@@ -47,7 +47,7 @@ print('Successfully splitted')
 def splitter(audio_file_path: str):
     # print(whisper.available_models())
     initial_time = datetime.datetime.now()
-    model = whisper.load_model("large", in_memory=False)
+    model = whisper.load_model("base", in_memory=False)
     options = whisper.DecodingOptions(language='uk', without_timestamps=True, fp16=False)
     print(f"Decoding options: {options}")
     transcribed_text = open('Interview.txt', 'a')
