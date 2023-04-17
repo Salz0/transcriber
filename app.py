@@ -39,15 +39,16 @@ class SplitWavAudioMubin():
                 return counter + 1
 """
 
+
 # split_flac = SplitWavAudioMubin('splits', 'speech.wav')
 # splits_amount = split_flac.multiple_split(min_per_split=1)
-print("Successfully splitted")
+# print("Successfully splitted")
 
 
 def splitter(audio_file_path: str):
     # print(whisper.available_models())
     initial_time = datetime.datetime.now()
-    model = whisper.load_model("base", in_memory=False)
+    # model = whisper.load_model("base", in_memory=False)
     options = whisper.DecodingOptions(
         language="uk", without_timestamps=True, fp16=False
     )
@@ -107,5 +108,6 @@ async def basic(request: Request, response: Response):
 
 
 if __name__ == "__main__":
-    whisper.load_model("base", in_memory=False)
+    model = whisper.load_model("base", in_memory=False)
+    global model
     uvicorn.run(app, host="0.0.0.0", port=8000)
