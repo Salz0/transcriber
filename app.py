@@ -47,10 +47,10 @@ print('Successfully splitted')
 def splitter(audio_file_path: str):
     # print(whisper.available_models())
     initial_time = datetime.datetime.now()
-    model = whisper.load_model("base", in_memory=False)
+    model = whisper.load_model("large", in_memory=False)
     options = whisper.DecodingOptions(language='uk', without_timestamps=True, fp16=False)
     print(f"Decoding options: {options}")
-    transcribed_text = open('text/Interview.txt', 'a')
+    transcribed_text = open('Interview.txt', 'a')
     for i in range(0, 1):  # splits_amount
         # audio,sr=librosa.load(f'splits/{i}_speech.flac', sr=None, mono=True)
         # audio=whisper.load_audio(f'splits/{i}_speech.flac')
@@ -71,7 +71,7 @@ def splitter(audio_file_path: str):
     time_elapsed = final_time - initial_time
     print(time_elapsed, "Seconds")
     filename = 'Interview.txt'
-    file_path = 'text/'
+    file_path = ''
     return file_path, filename
 
 
@@ -86,15 +86,15 @@ async def transcribe(file: UploadFile = File(...)):
 
     contents = await file.read()
     file_name = pathlib.Path(file.filename)
-    with open(os.path.join("audios/", file_name), "wb") as f:
+    with open(os.path.join(file_name), "wb") as f:
         f.write(contents)
 
     logger.info(file_name)
     # logger.info(audio_file)
-    file_path, filename = splitter(f'audios/{file_name}')
+    file_path, filename = splitter(f'{file_name}')
 
     # do something with the file, such as processing it or storing it in a database
-    return FileResponse(f'{file_path}/{filename}')
+    return FileResponse(f'{filename}')
 
 
 @app.get('/')
